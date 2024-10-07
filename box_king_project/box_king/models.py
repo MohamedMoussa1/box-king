@@ -11,6 +11,6 @@ class QR_Code(models.Model):
     pdf_file = models.FileField(upload_to='qr_codes')
 
 class Item(models.Model):
-    box = models.ForeignKey(Box, on_delete=models.CASCADE)
+    box = models.ForeignKey(Box, on_delete=models.CASCADE, related_name='items')
     item_name = models.CharField(max_length=50)
     quantity = models.PositiveIntegerField(default=1)
