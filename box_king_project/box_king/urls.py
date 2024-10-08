@@ -6,5 +6,5 @@ urlpatterns = [
     path("", views.index, name="index"),
     path("create-user", views.create_user, name="create_user"),
     path("create-box", views.create_box, name="create_box"),
-    path('box/<int:box_id>/qr-code', views.view_qr_code, name='view_qr_code')
+    path('box/<int:box_id>/qr-code', views.generate_qr_code_pdf, name='generate_qr_code_pdf')
 ]
