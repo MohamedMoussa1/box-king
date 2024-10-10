@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
-from .models import Box
+from .models import Box, Item
 from reportlab.pdfgen import canvas
 import json, io, qrcode
 
@@ -80,3 +80,28 @@ def generate_qr_code_pdf(request, box_id):
     response['Content-Disposition'] = f'inline; filename="{box.box_name} QR Code.pdf"'
 
     return response
+
+# TODO: Remove csrf exemption
+@csrf_exempt
+def create_item(request, box_id):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        box = get_object_or_404(Box, id=box_id)
+        item_name = data.get('item_name')
+        quantity = data.get('quantity')
+        
+        item = Item.objects.create(
+            item_name=item_name,
+            quantity=quantity,
+            box_id=box_id
+        )
+        return HttpResponse(f'Item {item_name} was added to {box.box_name} successfully!')
+    else:
+        return HttpResponse('Invalid request method.')
+
+def view_items(request, box_id):
+    if request.method == 'GET':
+        box = get_object_or_404(Box, id=box_id)
+        return HttpResponse(f'You are viewing {box.box_name} items {box.items.all()}')
+    else:
+        return HttpResponse('Invalid request method.')

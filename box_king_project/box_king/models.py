@@ -10,3 +10,5 @@ class Item(models.Model):
     box = models.ForeignKey(Box, on_delete=models.CASCADE, related_name='items')
     item_name = models.CharField(max_length=50)
     quantity = models.PositiveIntegerField(default=1)
+    def __str__(self):
+        return f"{self.item_name} (Quantity: {self.quantity})"
