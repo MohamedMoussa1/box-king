@@ -5,6 +5,8 @@ class Box(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     box_name = models.CharField(max_length=30, blank=False)
     box_description = models.CharField(max_length=200)
+    def __str__(self):
+        return f"{self.box_name}"
 
 class Item(models.Model):
     box = models.ForeignKey(Box, on_delete=models.CASCADE, related_name='items')

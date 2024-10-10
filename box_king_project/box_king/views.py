@@ -9,7 +9,10 @@ import json, io, qrcode
 
 
 def index(request):
-    return HttpResponse(f'Boxes available: {Box.objects.all()}')
+    if request.method == 'GET':
+        return HttpResponse(f'Boxes available: {Box.objects.all()}')
+    else:
+        return HttpResponse('Invalid request method.')
 
 # TODO: Remove csrf exemption
 @csrf_exempt
