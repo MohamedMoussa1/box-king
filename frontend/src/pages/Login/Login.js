@@ -1,26 +1,24 @@
-import "./Register.css";
+import "./Login.css";
 import { Box } from "@mui/material";
 import CustomForm from "../../components/CustomForm/CustomForm";
 
-const Register = () => {
+const Login = () => {
   const fields = [
-    { name: "first_name", label: "First Name", type: "text", required: true },
-    { name: "last_name", label: "Last Name", type: "text", required: true },
     { name: "email", label: "Email", type: "email", required: true },
     { name: "password", label: "Password", type: "password", required: true },
   ];
 
-  const header = "Register";
-  const buttonText = "Get Started";
-  const register = true;
+  const header = "Login";
+  const buttonText = "Login";
+  const login = true;
 
   return (
-    <Box className="page-container register-container">
+    <Box className="page-container login-container">
       <Box className="img-container">
         <img
           src="/assets/box_tracking.jpg"
           alt="Box King"
-          className="register-img"
+          className="login-img"
         />
       </Box>
       <Box className="custom-form-container">
@@ -28,11 +26,11 @@ const Register = () => {
           fields={fields}
           header={header}
           buttonText={buttonText}
-          register={register}
+          login={login}
         ></CustomForm>
       </Box>
     </Box>
   );
 };
 
-export default Register;
+export default Login;

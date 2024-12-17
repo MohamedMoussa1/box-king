@@ -3,7 +3,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import { Box, TextField, Button, Typography, Link, Paper } from "@mui/material";
 
-const CustomForm = ({ fields, buttonText, register, login }) => {
+const CustomForm = ({ fields, header, buttonText, register, login }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState(
     fields.reduce((acc, field) => ({ ...acc, [field.name]: "" }), {})
@@ -36,7 +36,7 @@ const CustomForm = ({ fields, buttonText, register, login }) => {
   return (
     <form onSubmit={handleSubmit}>
       <Paper elevation={3} className="form-container">
-        <Typography variant="h4">Register</Typography>
+        <Typography variant="h4">{header}</Typography>
         <Box className="fields-container">
           {fields.map((field, index) => (
             <TextField
@@ -64,7 +64,7 @@ const CustomForm = ({ fields, buttonText, register, login }) => {
           </Button>
           {register && (
             <Typography>
-              Already have an account? <Link href="#">Log in</Link>
+              Already have an account? <Link href="#">Login</Link>
             </Typography>
           )}
           {login && (
