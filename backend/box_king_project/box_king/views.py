@@ -11,7 +11,7 @@ from django.conf import settings
 from .auth import jwt_required
 from .models import Box, Item
 from reportlab.pdfgen import canvas
-import json, io, qrcode, jwt
+import json, io, qrcode, jwt, datetime
 
 
 def index(request):
@@ -30,9 +30,11 @@ def login(request):
     password = data.get('password')
     user = authenticate(username=email, password=password)
     if user:
+        expiry_time = expiry_time = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(hours=8)
         payload = {
             'id': user.id,
             'email': user.email,
+            'exp': expiry_time
         }
         jwt_token = {'token': jwt.encode(payload, settings.JWT_SECRET, algorithm='HS256')}
 
@@ -69,6 +71,7 @@ def user(request):
 
 # TODO: Remove csrf exemption
 @csrf_exempt
+@jwt_required
 def box(request, box_id=None):
     if request.method == 'GET':
         if box_id:
