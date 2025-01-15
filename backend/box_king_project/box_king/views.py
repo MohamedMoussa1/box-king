@@ -1,13 +1,17 @@
 from django.http import Http404
 from django.http import HttpResponse
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.db import IntegrityError
 from django.core.exceptions import ValidationError
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
+from django.conf import settings
+from .auth import jwt_required
 from .models import Box, Item
 from reportlab.pdfgen import canvas
-import json, io, qrcode
+import json, io, qrcode, jwt
 
 
 def index(request):
@@ -15,6 +19,26 @@ def index(request):
         return HttpResponse(f'You are on Box King Landing Page')
     else:
         return HttpResponse('Invalid request method.')
+
+# TODO: Remove csrf exemption
+@csrf_exempt
+def login(request):
+    if request.method != 'POST':
+        return HttpResponse('Invalid request method.', status=405)
+    data = json.loads(request.body)
+    email = data.get('email')
+    password = data.get('password')
+    user = authenticate(username=email, password=password)
+    if user:
+        payload = {
+            'id': user.id,
+            'email': user.email,
+        }
+        jwt_token = {'token': jwt.encode(payload, settings.JWT_SECRET, algorithm='HS256')}
+
+        return JsonResponse(jwt_token, status=200)
+    else:
+        return JsonResponse({'Error': "Invalid credentials"}, status=400)
 
 # TODO: Remove csrf exemption
 @csrf_exempt
@@ -27,7 +51,6 @@ def user(request):
             email = data.get('email')
             password = data.get('password')
 
-            # TODO: Exception handling when user already exists
             user = User.objects.create_user(
                 first_name=first_name,
                 last_name=last_name,
