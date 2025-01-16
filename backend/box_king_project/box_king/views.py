@@ -52,6 +52,16 @@ def login(request):
 
 # TODO: Remove csrf exemption
 @csrf_exempt
+def logout(request):
+    if request.method != 'POST':
+        return HttpResponse('Invalid request method.', status=405)
+    response = JsonResponse({'message': 'Logout successful'})
+    response.delete_cookie('token')
+
+    return response
+
+# TODO: Remove csrf exemption
+@csrf_exempt
 def user(request):
     if request.method == 'POST':
         try:
