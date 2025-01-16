@@ -22,12 +22,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 JWT_SECRET = env('JWT_SECRET')
+COOKIE_HTTP_SECURE = env('COOKIE_HTTP_SECURE')
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-4su3unyy7zbwz6td9zn%wq$6byq$2scv@zn00ecpb+)9c$vc&^'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+
+CORS_ALLOW_CREDENTIALS = True
 
 ALLOWED_HOSTS = []
 

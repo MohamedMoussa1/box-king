@@ -30,15 +30,23 @@ def login(request):
     password = data.get('password')
     user = authenticate(username=email, password=password)
     if user:
-        expiry_time = expiry_time = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(hours=8)
+        expiry_time = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(hours=8)
         payload = {
             'id': user.id,
             'email': user.email,
             'exp': expiry_time
         }
-        jwt_token = {'token': jwt.encode(payload, settings.JWT_SECRET, algorithm='HS256')}
-
-        return JsonResponse(jwt_token, status=200)
+        jwt_token = jwt.encode(payload, settings.JWT_SECRET, algorithm='HS256')
+        response = JsonResponse({'message': 'Login successful'})
+        response.set_cookie(
+            key='token',
+            value=jwt_token,
+            httponly=True,
+            secure=eval(settings.COOKIE_HTTP_SECURE),
+            samesite='Strict',
+            max_age=3600 * 8
+        )
+        return response
     else:
         return JsonResponse({'Error': "Invalid credentials"}, status=400)
 
