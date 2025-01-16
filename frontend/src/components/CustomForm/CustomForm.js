@@ -26,6 +26,12 @@ const CustomForm = ({ fields, header, buttonText, register, login }) => {
           `${process.env.REACT_APP_API_URL}/box-king/user`,
           formData
         );
+      } else if (login) {
+        await axios.post(
+          `${process.env.REACT_APP_API_URL}/box-king/login`,
+          formData,
+          { withCredentials: true }
+        );
       }
     } catch (error) {
       console.error("Error Occured:", error);
