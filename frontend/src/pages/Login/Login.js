@@ -10,6 +10,7 @@ const Login = () => {
 
   const header = "Login";
   const buttonText = "Login";
+  const errors = ["invalidCredentials"];
   const login = true;
 
   return (
@@ -26,6 +27,7 @@ const Login = () => {
           fields={fields}
           header={header}
           buttonText={buttonText}
+          errors={errors}
           login={login}
         ></CustomForm>
       </Box>

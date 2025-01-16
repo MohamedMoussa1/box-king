@@ -9,6 +9,17 @@
     width: 500px;
     box-sizing: border-box;
 
+    .error-container {
+        border-radius: 16px;
+        background-color: rgba(247, 221, 217);
+        color: rgba(125, 45, 11);
+        font-size: medium;
+        width: 95%;
+        max-width: 100%;
+        padding: 16px;
+        box-sizing: border-box;
+    }
+
     .fields-container {
         display: flex;
         flex-direction: column;

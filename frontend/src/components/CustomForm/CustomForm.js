@@ -3,8 +3,18 @@ import axios from "axios";
 import React, { useState } from "react";
 import { Box, TextField, Button, Typography, Link, Paper } from "@mui/material";
 
-const CustomForm = ({ fields, header, buttonText, register, login }) => {
+const CustomForm = ({
+  fields,
+  header,
+  buttonText,
+  errors,
+  register,
+  login,
+}) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formErrors, setformErrors] = useState(
+    errors.reduce((acc, error) => ({ ...acc, [error]: false }), {})
+  );
   const [formData, setFormData] = useState(
     fields.reduce((acc, field) => ({ ...acc, [field.name]: "" }), {})
   );
@@ -34,6 +44,12 @@ const CustomForm = ({ fields, header, buttonText, register, login }) => {
         );
       }
     } catch (error) {
+      if (login && error.status === 400) {
+        setformErrors((prevErrors) => ({
+          ...prevErrors,
+          ["invalidCredentials"]: true,
+        }));
+      }
       console.error("Error Occured:", error);
     } finally {
       setIsSubmitting(false);
@@ -43,6 +59,11 @@ const CustomForm = ({ fields, header, buttonText, register, login }) => {
     <form onSubmit={handleSubmit}>
       <Paper elevation={3} className="form-container">
         <Typography variant="h4">{header}</Typography>
+        {formErrors.invalidCredentials && (
+          <Typography className="error-container">
+            Your email or password was incorrect. Please try again.
+          </Typography>
+        )}
         <Box className="fields-container">
           {fields.map((field, index) => (
             <TextField
