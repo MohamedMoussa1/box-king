@@ -1,6 +1,7 @@
 import "./Register.css";
 import { Box } from "@mui/material";
 import CustomForm from "../../components/CustomForm/CustomForm";
+import Banner from "../../components/Banner/Banner";
 
 const Register = () => {
   const fields = [
@@ -15,21 +16,26 @@ const Register = () => {
   const register = true;
 
   return (
-    <Box className="page-container register-container">
-      <Box className="img-container">
-        <img
-          src="/assets/box_tracking.jpg"
-          alt="Box King"
-          className="register-img"
-        />
+    <Box className="page-container">
+      <Box className="banner-container">
+        <Banner />
       </Box>
-      <Box className="custom-form-container">
-        <CustomForm
-          fields={fields}
-          header={header}
-          buttonText={buttonText}
-          register={register}
-        ></CustomForm>
+      <Box className="register-container">
+        <Box className="img-container">
+          <img
+            src="/assets/box_tracking.jpg"
+            alt="Box King"
+            className="register-img"
+          />
+        </Box>
+        <Box className="custom-form-container">
+          <CustomForm
+            fields={fields}
+            header={header}
+            buttonText={buttonText}
+            register={register}
+          ></CustomForm>
+        </Box>
       </Box>
     </Box>
   );

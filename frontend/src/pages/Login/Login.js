@@ -1,6 +1,7 @@
 import "./Login.css";
 import { Box } from "@mui/material";
 import CustomForm from "../../components/CustomForm/CustomForm";
+import Banner from "../../components/Banner/Banner";
 
 const Login = () => {
   const fields = [
@@ -14,22 +15,27 @@ const Login = () => {
   const login = true;
 
   return (
-    <Box className="page-container login-container">
-      <Box className="img-container">
-        <img
-          src="/assets/box_tracking.jpg"
-          alt="Box King"
-          className="login-img"
-        />
+    <Box className="page-container">
+      <Box className="banner-container">
+        <Banner />
       </Box>
-      <Box className="custom-form-container">
-        <CustomForm
-          fields={fields}
-          header={header}
-          buttonText={buttonText}
-          errors={errors}
-          login={login}
-        ></CustomForm>
+      <Box className="login-container">
+        <Box className="img-container">
+          <img
+            src="/assets/box_tracking.jpg"
+            alt="Box King"
+            className="login-img"
+          />
+        </Box>
+        <Box className="custom-form-container">
+          <CustomForm
+            fields={fields}
+            header={header}
+            buttonText={buttonText}
+            errors={errors}
+            login={login}
+          ></CustomForm>
+        </Box>
       </Box>
     </Box>
   );

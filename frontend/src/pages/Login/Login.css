@@ -1,19 +1,28 @@
-.login-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-
-    .custom-form-container {
-        margin: auto;
+.page-container {
+    .banner-container {
+        text-align: left;
+        margin: 0 0 5px 0;
+        padding: 2px  0 0 16px;
+        background: rgb(240, 240, 240);
     }
 
-    .img-container {
-        margin: auto;
-    }
+    .login-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
 
-    .login-img {
-        width: 700px;
-        max-width: 700px;
+        .custom-form-container {
+            margin: auto;
+        }
+
+        .img-container {
+            margin: auto;
+        }
+
+        .login-img {
+            width: 700px;
+            max-width: 700px;
+        }
     }
 }
