@@ -13,7 +13,7 @@ const CustomForm = ({
 }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formErrors, setformErrors] = useState(
-    errors.reduce((acc, error) => ({ ...acc, [error]: false }), {})
+    (errors ?? []).reduce((acc, error) => ({ ...acc, [error]: false }), {})
   );
   const [formData, setFormData] = useState(
     fields.reduce((acc, field) => ({ ...acc, [field.name]: "" }), {})
