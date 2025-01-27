@@ -1,17 +1,38 @@
 .navbar-container {
-    text-align: left;
+    display: flex;
+    justify-content: space-between;
     margin: 0 0 5px 0;
-    padding: 2px  0 0 16px;
+    padding: 2px  16px 0 16px;
     background: rgb(240, 240, 240);
 
-    .banner-button {
+    .banner {
         font-family: Brush Script MT;
         color: cornflowerblue;
         font-size: 50px;
-        padding: 0;
-        text-transform: none;
         text-decoration: none;
-        border: none;
-        outline: none;
+    }
+
+    .navbar-right {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+        .navbar-link {
+            color: black;
+            text-decoration: none;
+            
+            .navbar-button {
+                text-transform: none;
+            }
+
+            .login-button {
+                border-radius: 0 20px;
+            }
+
+            .register-button {
+                border-radius: 20px 0;
+                background-color: black;
+            }
+        }
     }
 }
