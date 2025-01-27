@@ -1,7 +1,6 @@
 import "./Login.css";
 import { Box } from "@mui/material";
 import CustomForm from "../../components/CustomForm/CustomForm";
-import Banner from "../../components/Banner/Banner";
 
 const Login = () => {
   const fields = [
@@ -16,9 +15,6 @@ const Login = () => {
 
   return (
     <Box className="page-container">
-      <Box className="banner-container">
-        <Banner />
-      </Box>
       <Box className="login-container">
         <Box className="img-container">
           <img

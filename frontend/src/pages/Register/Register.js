@@ -1,7 +1,6 @@
 import "./Register.css";
 import { Box } from "@mui/material";
 import CustomForm from "../../components/CustomForm/CustomForm";
-import Banner from "../../components/Banner/Banner";
 
 const Register = () => {
   const fields = [
@@ -17,9 +16,6 @@ const Register = () => {
 
   return (
     <Box className="page-container">
-      <Box className="banner-container">
-        <Banner />
-      </Box>
       <Box className="register-container">
         <Box className="img-container">
           <img

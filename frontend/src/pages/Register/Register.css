@@ -1,11 +1,4 @@
 .page-container {
-    .banner-container {
-        text-align: left;
-        margin: 0 0 5px 0;
-        padding: 2px  0 0 16px;
-        background: rgb(240, 240, 240);
-    }
-    
     .register-container {
         display: flex;
         justify-content: space-between;
