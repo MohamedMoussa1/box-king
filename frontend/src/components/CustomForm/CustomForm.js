@@ -2,6 +2,7 @@ import "./CustomForm.css";
 import axios from "axios";
 import React, { useState } from "react";
 import { Box, TextField, Button, Typography, Link, Paper } from "@mui/material";
+import { useUser } from "../../context/UserContext";
 
 const CustomForm = ({
   fields,
@@ -11,6 +12,7 @@ const CustomForm = ({
   register,
   login,
 }) => {
+  const { setUser } = useUser();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formErrors, setformErrors] = useState(
     (errors ?? []).reduce((acc, error) => ({ ...acc, [error]: false }), {})
@@ -42,6 +44,7 @@ const CustomForm = ({
           formData,
           { withCredentials: true }
         );
+        setUser({ username: formData.email });
       }
     } catch (error) {
       if (login && error.status === 400) {
