@@ -1,7 +1,8 @@
 import "./CustomForm.css";
 import axios from "axios";
 import React, { useState } from "react";
-import { Box, TextField, Button, Typography, Link, Paper } from "@mui/material";
+import { Box, TextField, Button, Typography, Paper } from "@mui/material";
+import { Link } from "react-router-dom";
 import { useUser } from "../../context/UserContext";
 
 const CustomForm = ({
@@ -94,12 +95,12 @@ const CustomForm = ({
           </Button>
           {register && (
             <Typography>
-              Already have an account? <Link href="#">Login</Link>
+              Already have an account? <Link to="/login">Login</Link>
             </Typography>
           )}
           {login && (
             <Typography>
-              Don't have an account yet? <Link href="#">Register</Link>
+              Don't have an account yet? <Link to="/register">Register</Link>
             </Typography>
           )}
         </Box>
