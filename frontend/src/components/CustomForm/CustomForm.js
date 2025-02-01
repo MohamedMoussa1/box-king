@@ -51,7 +51,7 @@ const CustomForm = ({
       if (login && error.status === 400) {
         setformErrors((prevErrors) => ({
           ...prevErrors,
-          ["invalidCredentials"]: true,
+          invalidCredentials: true,
         }));
       }
       console.error("Error Occured:", error);
