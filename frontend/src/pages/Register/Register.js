@@ -1,8 +1,10 @@
 import "./Register.css";
 import { Box } from "@mui/material";
+import useRedirectIfLoggedIn from "../../hooks/useRedirectIfLoggedIn";
 import CustomForm from "../../components/CustomForm/CustomForm";
 
 const Register = () => {
+  const { checkingIfLoggedIn } = useRedirectIfLoggedIn();
   const fields = [
     { name: "first_name", label: "First Name", type: "text", required: true },
     { name: "last_name", label: "Last Name", type: "text", required: true },
@@ -13,6 +15,8 @@ const Register = () => {
   const header = "Register";
   const buttonText = "Get Started";
   const register = true;
+
+  if (checkingIfLoggedIn) return null;
 
   return (
     <Box className="page-container">
