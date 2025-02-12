@@ -1,0 +1,14 @@
+.page-container {
+    .dashboard-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        padding-top: 1.5rem;
+        gap: 1rem;
+    }
+}
+
+.get-boxes-status {
+    padding: 20px;
+}

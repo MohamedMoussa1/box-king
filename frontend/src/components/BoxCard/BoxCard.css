@@ -3,6 +3,7 @@
     display: flex;
     flex-direction: column;
     max-width: 200px;
+    width: 200px;
     height: fit-content;
     border: solid 1px lightblue;
     border-radius: 10px;
@@ -39,6 +40,9 @@
         
         .card-name {
             padding: 6px 8px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .card-button {

@@ -96,7 +96,8 @@ def box(request, box_id=None):
             box = get_object_or_404(Box, id=box_id)
             return HttpResponse(f'You are viewing {box.box_name} items {box.items.all()}')
         else:
-            return HttpResponse(f'Boxes available: {Box.objects.all()}')
+            box_list = list(Box.objects.filter(user_id=request.user['id']).values('id', 'box_name'))
+            return JsonResponse({'boxes': box_list}, status=200)
     elif request.method == 'POST':
         try:
             data = json.loads(request.body)

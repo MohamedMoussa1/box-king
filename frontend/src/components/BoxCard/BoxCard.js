@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { FaBox, FaBoxOpen } from "react-icons/fa";
 
-const BoxCard = () => {
+const BoxCard = ({ box_name }) => {
   return (
     <Box className="card-container">
       <Button component={Link} to="#" className="card-top">
@@ -12,7 +12,9 @@ const BoxCard = () => {
         <FaBoxOpen className="box-icon-hover" />
       </Button>
       <Box className="card-bottom">
-        <Typography className="card-name">Placeholder</Typography>
+        <Typography className="card-name" title={box_name}>
+          {box_name}
+        </Typography>
         <Button className="card-button">
           <MoreVertIcon fontSize="medium" />
         </Button>

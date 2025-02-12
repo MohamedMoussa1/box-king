@@ -72,7 +72,7 @@ const Navbar = () => {
                   <SpaceDashboardIcon fontSize="small" />
                 </ListItemIcon>
                 <NavLink
-                  to="/"
+                  to="/dashboard"
                   style={{ textDecoration: "none", color: "inherit" }}
                 >
                   Dashboard
