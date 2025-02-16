@@ -2,25 +2,18 @@ import "./Dashboard.css";
 import { useState, useEffect } from "react";
 import { useUser } from "../../context/UserContext";
 import { useNavigate } from "react-router-dom";
+import useRedirectIfLoggedOut from "../../hooks/useRedirectIfLoggedOut";
 import axios from "axios";
 import { Box, Typography } from "@mui/material";
 import BoxCard from "../../components/BoxCard/BoxCard";
 
 const Dashboard = () => {
-  const { user, setUser } = useUser();
+  const { setUser } = useUser();
   const navigate = useNavigate();
-  const [checkingUser, setCheckingUser] = useState(true);
+  const { checkingIfLoggedOut } = useRedirectIfLoggedOut();
   const [boxes, setBoxes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  useEffect(() => {
-    if (!user) {
-      navigate("/login");
-    } else {
-      setCheckingUser(false);
-    }
-  }, [navigate, user, setCheckingUser]);
 
   useEffect(() => {
     async function getBoxes() {
@@ -47,7 +40,7 @@ const Dashboard = () => {
     getBoxes();
   }, [navigate, setUser]);
 
-  if (checkingUser) return null;
+  if (checkingIfLoggedOut) return null;
 
   if (loading) {
     return <Typography className="get-boxes-status">Loading...</Typography>;

@@ -3,7 +3,7 @@ import axios from "axios";
 import { useState } from "react";
 import { Box, TextField, Button, Typography, Paper } from "@mui/material";
 import { useUser } from "../../context/UserContext";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const CustomForm = ({
   fields,
@@ -14,7 +14,6 @@ const CustomForm = ({
   login,
 }) => {
   const { setUser } = useUser();
-  const navigate = useNavigate;
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formErrors, setformErrors] = useState(
     (errors ?? []).reduce((acc, error) => ({ ...acc, [error]: false }), {})
@@ -47,7 +46,6 @@ const CustomForm = ({
           { withCredentials: true }
         );
         setUser({ username: formData.email });
-        navigate("/dashboard", { replace: true });
       }
     } catch (error) {
       if (login && error.status === 400) {

@@ -9,7 +9,10 @@ const useRedirectIfLoggedIn = () => {
 
   useEffect(() => {
     if (user) {
-      navigate("/dashboard");
+      const intendedRouteAfterLogin =
+        localStorage.getItem("intendedRouteAfterLogin") || "/dashboard";
+      localStorage.removeItem("intendedRouteAfterLogin");
+      navigate(intendedRouteAfterLogin);
     } else {
       setCheckingIfLoggedIn(false);
     }
