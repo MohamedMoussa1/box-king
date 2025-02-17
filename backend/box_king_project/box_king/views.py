@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404
 from django.db import IntegrityError
 from django.core.exceptions import ValidationError
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.conf import settings
@@ -22,9 +23,8 @@ def index(request):
 
 # TODO: Remove csrf exemption
 @csrf_exempt
+@require_http_methods(['POST'])
 def login(request):
-    if request.method != 'POST':
-        return HttpResponse('Invalid request method.', status=405)
     data = json.loads(request.body)
     email = data.get('email')
     password = data.get('password')
@@ -52,9 +52,8 @@ def login(request):
 
 # TODO: Remove csrf exemption
 @csrf_exempt
+@require_http_methods(['POST'])
 def logout(request):
-    if request.method != 'POST':
-        return HttpResponse('Invalid request method.', status=405)
     response = JsonResponse({'message': 'Logout successful'})
     response.delete_cookie('token')
 
@@ -62,34 +61,33 @@ def logout(request):
 
 # TODO: Remove csrf exemption
 @csrf_exempt
+@require_http_methods(['POST'])
 def user(request):
-    if request.method == 'POST':
-        try:
-            data = json.loads(request.body)
-            first_name = data.get('first_name')
-            last_name = data.get('last_name')
-            email = data.get('email')
-            password = data.get('password')
+    try:
+        data = json.loads(request.body)
+        first_name = data.get('first_name')
+        last_name = data.get('last_name')
+        email = data.get('email')
+        password = data.get('password')
 
-            user = User.objects.create_user(
-                first_name=first_name,
-                last_name=last_name,
-                email=email,
-                username=email,
-                password=password
-            )
-            
-            return HttpResponse(f'User {user.first_name} created successfully!')
-        except IntegrityError:
-            return HttpResponse(f'A user with this email already exists. Would you like to login?', status=400)
-        except ValidationError as e:
-            return HttpResponse(f'Invalid input: {e.message}', status=400)
-    else:
-        return HttpResponse('Invalid request method.')
+        user = User.objects.create_user(
+            first_name=first_name,
+            last_name=last_name,
+            email=email,
+            username=email,
+            password=password
+        )
+        
+        return HttpResponse(f'User {user.first_name} created successfully!')
+    except IntegrityError:
+        return HttpResponse(f'A user with this email already exists. Would you like to login?', status=400)
+    except ValidationError as e:
+        return HttpResponse(f'Invalid input: {e.message}', status=400)
 
 # TODO: Remove csrf exemption
 @csrf_exempt
 @jwt_required
+@require_http_methods(['GET', 'POST'])
 def box(request, box_id=None):
     if request.method == 'GET':
         if box_id:
@@ -98,7 +96,7 @@ def box(request, box_id=None):
         else:
             box_list = list(Box.objects.filter(user_id=request.user['id']).values('id', 'box_name'))
             return JsonResponse({'boxes': box_list}, status=200)
-    elif request.method == 'POST':
+    if request.method == 'POST':
         try:
             data = json.loads(request.body)
             box_name = data.get('box_name')
@@ -113,8 +111,6 @@ def box(request, box_id=None):
             return HttpResponse(f'Box {box.box_name} created successfully!')
         except ValidationError as e:
             return HttpResponse(f'Invalid input: {e.message}', status=400)
-    else:
-        return HttpResponse('Invalid request method.')
 
 
 def generate_qr_code_pdf(request, box_id):
@@ -148,21 +144,19 @@ def generate_qr_code_pdf(request, box_id):
 
 # TODO: Remove csrf exemption
 @csrf_exempt
+@require_http_methods(['POST'])
 def add_item(request, box_id):
-    if request.method == 'POST':
-        try:
-            data = json.loads(request.body)
-            box = get_object_or_404(Box, id=box_id)
-            item_name = data.get('item_name')
-            quantity = data.get('quantity')
-            
-            item = Item.objects.create(
-                item_name=item_name,
-                quantity=quantity,
-                box_id=box_id
-            )
-            return HttpResponse(f'Item {item.item_name} was added to {box.box_name} successfully!')
-        except ValidationError as e:
-            return HttpResponse(f'Invalid input: {e.message}', status=400)
-    else:
-        return HttpResponse('Invalid request method.')
+    try:
+        data = json.loads(request.body)
+        box = get_object_or_404(Box, id=box_id)
+        item_name = data.get('item_name')
+        quantity = data.get('quantity')
+        
+        item = Item.objects.create(
+            item_name=item_name,
+            quantity=quantity,
+            box_id=box_id
+        )
+        return HttpResponse(f'Item {item.item_name} was added to {box.box_name} successfully!')
+    except ValidationError as e:
+        return HttpResponse(f'Invalid input: {e.message}', status=400)
