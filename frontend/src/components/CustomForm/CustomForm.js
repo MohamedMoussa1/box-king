@@ -3,7 +3,7 @@ import axios from "axios";
 import { useState } from "react";
 import { Box, TextField, Button, Typography, Paper } from "@mui/material";
 import { useUser } from "../../context/UserContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const CustomForm = ({
   fields,
@@ -14,6 +14,7 @@ const CustomForm = ({
   login,
 }) => {
   const { setUser } = useUser();
+  const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formErrors, setformErrors] = useState(
     (errors ?? []).reduce((acc, error) => ({ ...acc, [error]: false }), {})
@@ -39,6 +40,7 @@ const CustomForm = ({
           `${process.env.REACT_APP_API_URL}/box-king/user`,
           formData
         );
+        navigate("/login");
       } else if (login) {
         await axios.post(
           `${process.env.REACT_APP_API_URL}/box-king/login`,
