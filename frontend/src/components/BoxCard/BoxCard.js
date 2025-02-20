@@ -1,13 +1,19 @@
 import "./BoxCard.css";
 import { Box, Button, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { FaBox, FaBoxOpen } from "react-icons/fa";
 
-const BoxCard = ({ box_name }) => {
+const BoxCard = ({ box_name, box_id }) => {
+  const navigate = useNavigate();
+
+  const handleRedirect = () => {
+    navigate(`/box/${box_id}`);
+  };
+
   return (
     <Box className="card-container">
-      <Button component={Link} to="#" className="card-top">
+      <Button onClick={handleRedirect} className="card-top">
         <FaBox className="box-icon" />
         <FaBoxOpen className="box-icon-hover" />
       </Button>

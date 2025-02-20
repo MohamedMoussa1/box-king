@@ -13,7 +13,7 @@ const Dashboard = () => {
   const { checkingIfLoggedOut } = useRedirectIfLoggedOut();
   const [boxes, setBoxes] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     async function getBoxes() {
@@ -58,7 +58,7 @@ const Dashboard = () => {
     <Box className="page-container">
       <Box className="dashboard-container">
         {boxes.map((box) => (
-          <BoxCard key={box.id} box_name={box.box_name} />
+          <BoxCard key={box.id} box_name={box.box_name} box_id={box.id} />
         ))}
       </Box>
     </Box>

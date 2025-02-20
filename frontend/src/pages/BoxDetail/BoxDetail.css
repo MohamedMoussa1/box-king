@@ -1,0 +1,19 @@
+.page-container {
+    .box-detail-container {
+        padding: 0.5rem 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .box-detail-header {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: start;
+    }
+}
+
+.get-box-status {
+    padding: 20px;
+}

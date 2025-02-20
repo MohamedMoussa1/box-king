@@ -92,7 +92,10 @@ def box(request, box_id=None):
     if request.method == 'GET':
         if box_id:
             box = get_object_or_404(Box, id=box_id)
-            return HttpResponse(f'You are viewing {box.box_name} items {box.items.all()}')
+            box_name = box.box_name
+            box_description = box.box_description
+            item_list = list(box.items.values('item_name', 'quantity'))
+            return JsonResponse({'box_name': box_name, 'box_description': box_description, 'box_items': item_list}, status=200)
         else:
             box_list = list(Box.objects.filter(user_id=request.user['id']).values('id', 'box_name'))
             return JsonResponse({'boxes': box_list}, status=200)
