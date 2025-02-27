@@ -4,6 +4,7 @@ import { Box, Typography } from "@mui/material";
 import useRedirectIfLoggedOut from "../../hooks/useRedirectIfLoggedOut";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import BoxItemsTable from "../../components/BoxItemsTable/BoxItemsTable";
 
 const BoxDetail = () => {
   const { checkingIfLoggedOut } = useRedirectIfLoggedOut();
@@ -51,7 +52,7 @@ const BoxDetail = () => {
           <Typography>Description: {boxDetail.box_description}</Typography>
         </Box>
         <Box className="box-detail-table">
-          <Typography>Box Items Table Placeholder</Typography>
+          <BoxItemsTable box_id={box_id} box_items={boxDetail.box_items} />
         </Box>
       </Box>
     </Box>

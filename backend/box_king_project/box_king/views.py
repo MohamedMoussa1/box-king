@@ -94,7 +94,7 @@ def box(request, box_id=None):
             box = get_object_or_404(Box, id=box_id)
             box_name = box.box_name
             box_description = box.box_description
-            item_list = list(box.items.values('item_name', 'quantity'))
+            item_list = list(box.items.values('id', 'item_name', 'quantity'))
             return JsonResponse({'box_name': box_name, 'box_description': box_description, 'box_items': item_list}, status=200)
         else:
             box_list = list(Box.objects.filter(user_id=request.user['id']).values('id', 'box_name'))
