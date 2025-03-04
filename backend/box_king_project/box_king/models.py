@@ -10,7 +10,13 @@ class Box(models.Model):
 
 class Item(models.Model):
     box = models.ForeignKey(Box, on_delete=models.CASCADE, related_name='items')
-    item_name = models.CharField(max_length=50)
+    item_name = models.CharField(max_length=50, blank=False)
     quantity = models.PositiveIntegerField(default=1)
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=["item_name", "box"], name="unique_item_name_per_box"),
+            models.CheckConstraint(check=~models.Q(item_name=""), name="item_name_cannot_be_empty_string"),
+            models.CheckConstraint(check=models.Q(quantity__gt=0), name="quantity_must_be_gt_zero")
+        ]
     def __str__(self):
         return f"{self.item_name} (Quantity: {self.quantity})"

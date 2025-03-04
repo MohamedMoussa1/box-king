@@ -147,6 +147,7 @@ def generate_qr_code_pdf(request, box_id):
 
 # TODO: Remove csrf exemption
 @csrf_exempt
+@jwt_required
 @require_http_methods(['POST'])
 def add_item(request, box_id):
     try:
@@ -160,6 +161,12 @@ def add_item(request, box_id):
             quantity=quantity,
             box_id=box_id
         )
-        return HttpResponse(f'Item {item.item_name} was added to {box.box_name} successfully!')
+        return JsonResponse({'id': item.id}, status=200)
+    except IntegrityError as e:
+        return JsonResponse({'error_type': 'integrity_error', 'message': str(e)}, status=400)
     except ValidationError as e:
-        return HttpResponse(f'Invalid input: {e.message}', status=400)
+        return JsonResponse({'error_type': 'validation_error', 'message': str(e)}, status=400)
+    except ValueError as e:
+        return JsonResponse({'error_type': 'value_error', 'message': str(e)}, status=400)
+    except Exception as e:
+        return JsonResponse({'error_type': 'unexpected_error', 'message': str(e)}, status=500)

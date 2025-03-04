@@ -1,5 +1,6 @@
 import "./BoxItemsTable.css";
 import { Box, Button } from "@mui/material";
+import CustomSnackBar from "../CustomSnackBar/CustomSnackBar";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
@@ -13,6 +14,7 @@ import {
   GridRowEditStopReasons,
 } from "@mui/x-data-grid";
 import { useState } from "react";
+import axios from "axios";
 
 const BoxItemsTable = ({ box_id, box_items }) => {
   const initialRows = box_items.map((item) => ({
@@ -23,6 +25,10 @@ const BoxItemsTable = ({ box_id, box_items }) => {
   const [rows, setRows] = useState(initialRows);
   const [rowModesModel, setRowModesModel] = useState({});
   const [gridKey, setGridKey] = useState(0);
+  const [snackBarKey, setSnackBarKey] = useState(0);
+  const [rowFormErrors, setRowFormErrors] = useState({});
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveSuccess, setSaveSuccess] = useState(false);
 
   function EditToolbar(props) {
     const { setRows, setRowModesModel } = props;
@@ -65,6 +71,7 @@ const BoxItemsTable = ({ box_id, box_items }) => {
   };
 
   const handleSaveClick = (id) => () => {
+    setIsSaving(true);
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
   };
 
@@ -86,9 +93,76 @@ const BoxItemsTable = ({ box_id, box_items }) => {
     setGridKey((prev) => prev + 1);
   };
 
-  const processRowUpdate = (newRow) => {
+  const validateRowForm = (newRow) => {
+    const { item_name, quantity } = newRow;
+    const newRowFormErrors = {};
+    if (!item_name || item_name.length > 50) {
+      newRowFormErrors.item_name =
+        "Item name must be between 1 to 50 characters.";
+    } else if (quantity < 1) {
+      newRowFormErrors.quantity = "Item quantity must be at least 1.";
+    }
+    if (Object.keys(newRowFormErrors).length > 0) {
+      setRowFormErrors(newRowFormErrors);
+      setSnackBarKey((prev) => prev + 1);
+      return false;
+    }
+    setRowFormErrors({});
+    return true;
+  };
+
+  const addItem = async (newRow) => {
+    setIsSaving(true);
+    const itemData = {
+      item_name: newRow.item_name,
+      quantity: newRow.quantity,
+    };
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/box-king/box/${box_id}/add-item`,
+        itemData,
+        { withCredentials: true }
+      );
+      newRow = {
+        ...newRow,
+        quantity: Math.trunc(newRow.quantity),
+        db_item_id: response.data.id,
+      };
+    } catch (error) {
+      console.error(error);
+      const response = error.response;
+      if (
+        response.data.error_type === "integrity_error" &&
+        response.data.message.includes("unique_item_name_per_box")
+      ) {
+        const duplicateName = newRow.item_name;
+        newRow = null;
+        setRowFormErrors({
+          item_name: `${duplicateName} is already in your box.`,
+        });
+      }
+    } finally {
+      setIsSaving(false);
+    }
+    return newRow;
+  };
+
+  const onProcessRowUpdateError = (error) => {
+    console.error("Error Occured:", error);
+  };
+
+  const processRowUpdate = async (newRow) => {
+    setSaveSuccess(false);
+    if (!validateRowForm(newRow)) {
+      setIsSaving(false);
+      return;
+    }
+    if (newRow.isNew) {
+      newRow = await addItem(newRow);
+    }
     const updatedRow = { ...newRow, isNew: false };
     setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+    setSaveSuccess(true);
     return updatedRow;
   };
 
@@ -97,7 +171,12 @@ const BoxItemsTable = ({ box_id, box_items }) => {
   };
 
   const columns = [
-    { field: "item_name", headerName: "Item", flex: 3, editable: true },
+    {
+      field: "item_name",
+      headerName: "Item",
+      flex: 3,
+      editable: true,
+    },
     {
       field: "quantity",
       headerName: "Qty",
@@ -124,6 +203,7 @@ const BoxItemsTable = ({ box_id, box_items }) => {
                 color: "primary.main",
               }}
               onClick={handleSaveClick(id)}
+              disabled={isSaving}
             />,
             <GridActionsCellItem
               icon={<CancelIcon />}
@@ -131,6 +211,7 @@ const BoxItemsTable = ({ box_id, box_items }) => {
               className="textPrimary"
               onClick={handleCancelClick(id)}
               color="inherit"
+              disabled={isSaving}
             />,
           ];
         }
@@ -142,12 +223,14 @@ const BoxItemsTable = ({ box_id, box_items }) => {
             className="textPrimary"
             onClick={handleEditClick(id)}
             color="inherit"
+            disabled={isSaving}
           />,
           <GridActionsCellItem
             icon={<DeleteIcon />}
             label="Delete"
             onClick={handleDeleteClick(id)}
             color="inherit"
+            disabled={isSaving}
           />,
         ];
       },
@@ -167,6 +250,18 @@ const BoxItemsTable = ({ box_id, box_items }) => {
         },
       }}
     >
+      {saveSuccess && (
+        <CustomSnackBar message="Item saved successfully!" severity="success" />
+      )}
+      {Object.keys(rowFormErrors).map((error) => {
+        return (
+          <CustomSnackBar
+            message={rowFormErrors[error]}
+            severity="error"
+            key={snackBarKey}
+          />
+        );
+      })}
       <DataGrid
         key={gridKey}
         rows={rows}
@@ -176,6 +271,7 @@ const BoxItemsTable = ({ box_id, box_items }) => {
         onRowModesModelChange={handleRowModesModelChange}
         onRowEditStop={handleRowEditStop}
         processRowUpdate={processRowUpdate}
+        onProcessRowUpdateError={onProcessRowUpdateError}
         slots={{ toolbar: EditToolbar }}
         slotProps={{
           toolbar: { setRows, setRowModesModel },
