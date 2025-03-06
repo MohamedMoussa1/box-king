@@ -48,7 +48,9 @@ const BoxDetail = () => {
       <Box className="box-detail-container">
         <Box className="box-detail-header">
           <Typography variant="h6">{boxDetail.box_name}</Typography>
-          <Typography>{boxDetail.box_description}</Typography>
+          <Typography>
+            {boxDetail.box_description || "No description available"}
+          </Typography>
         </Box>
         <Box className="box-detail-table">
           <BoxItemsTable box_id={box_id} box_items={boxDetail.box_items} />

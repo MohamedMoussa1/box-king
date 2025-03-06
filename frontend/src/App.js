@@ -10,6 +10,7 @@ import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import BoxDetail from "./pages/BoxDetail/BoxDetail";
+import CreateBox from "./pages/CreateBox/CreateBox";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/box/:box_id" element={<BoxDetail />} />
+            <Route path="/box/create-box" element={<CreateBox />} />
           </Routes>
         </div>
       </Router>

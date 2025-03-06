@@ -90,30 +90,39 @@ def user(request):
 @require_http_methods(['GET', 'POST'])
 def box(request, box_id=None):
     if request.method == 'GET':
-        if box_id:
-            box = get_object_or_404(Box, id=box_id)
-            box_name = box.box_name
-            box_description = box.box_description
-            item_list = list(box.items.values('id', 'item_name', 'quantity'))
-            return JsonResponse({'box_name': box_name, 'box_description': box_description, 'box_items': item_list}, status=200)
-        else:
-            box_list = list(Box.objects.filter(user_id=request.user['id']).values('id', 'box_name'))
-            return JsonResponse({'boxes': box_list}, status=200)
+        try:
+            if box_id:
+                box = get_object_or_404(Box, id=box_id)
+                box_name = box.box_name
+                box_description = box.box_description
+                item_list = list(box.items.values('id', 'item_name', 'quantity'))
+                return JsonResponse({'box_name': box_name, 'box_description': box_description, 'box_items': item_list}, status=200)
+            else:
+                box_list = list(Box.objects.filter(user_id=request.user['id']).values('id', 'box_name'))
+                return JsonResponse({'boxes': box_list}, status=200)
+        except Exception as e:
+            return JsonResponse({'error_type': 'unexpected_error', 'message': str(e)}, status=500)
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
             box_name = data.get('box_name')
             box_description = data.get('box_description')
-            user_id = data.get('user_id')
+            user_id = request.user['id']
 
             box = Box.objects.create(
                 box_name=box_name,
                 box_description=box_description,
                 user_id=user_id
             )
-            return HttpResponse(f'Box {box.box_name} created successfully!')
+            return JsonResponse({'id': box.id}, status=200)
+        except IntegrityError as e:
+            return JsonResponse({'error_type': 'integrity_error', 'message': str(e)}, status=400)
         except ValidationError as e:
-            return HttpResponse(f'Invalid input: {e.message}', status=400)
+            return JsonResponse({'error_type': 'validation_error', 'message': str(e)}, status=400)
+        except ValueError as e:
+            return JsonResponse({'error_type': 'value_error', 'message': str(e)}, status=400)
+        except Exception as e:
+            return JsonResponse({'error_type': 'unexpected_error', 'message': str(e)}, status=500)
 
 
 def generate_qr_code_pdf(request, box_id):

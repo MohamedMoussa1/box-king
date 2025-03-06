@@ -12,6 +12,7 @@ const CustomForm = ({
   errors,
   register,
   login,
+  createBox,
 }) => {
   const { setUser } = useUser();
   const navigate = useNavigate();
@@ -48,12 +49,29 @@ const CustomForm = ({
           { withCredentials: true }
         );
         setUser({ username: formData.email });
+      } else if (createBox) {
+        await axios.post(
+          `${process.env.REACT_APP_API_URL}/box-king/box`,
+          formData,
+          { withCredentials: true }
+        );
+        navigate("/dashboard");
       }
     } catch (error) {
+      const response = error.response;
       if (login && error.status === 400) {
         setformErrors((prevErrors) => ({
           ...prevErrors,
           invalidCredentials: true,
+        }));
+      } else if (
+        createBox &&
+        response.data.error_type === "integrity_error" &&
+        response.data.message.includes("unique_box_name_per_user")
+      ) {
+        setformErrors((prevErrors) => ({
+          ...prevErrors,
+          duplicateBoxName: true,
         }));
       }
       console.error("Error Occured:", error);
@@ -71,6 +89,12 @@ const CustomForm = ({
             Your email or password was incorrect. Please try again.
           </Typography>
         )}
+        {formErrors.duplicateBoxName && (
+          <Typography className="error-container">
+            Oops! A box with this name already exists. Please choose a different
+            name.
+          </Typography>
+        )}
         <Box className="fields-container">
           {fields.map((field, index) => (
             <TextField
@@ -79,6 +103,9 @@ const CustomForm = ({
               name={field.name}
               label={field.label}
               type={field.type}
+              slotProps={{
+                htmlInput: { maxLength: field.maxLength || "unset" },
+              }}
               variant="outlined"
               className="field"
               value={formData[field.name]}

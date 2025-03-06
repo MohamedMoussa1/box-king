@@ -2,10 +2,39 @@
     .dashboard-container {
         display: flex;
         flex-wrap: wrap;
+        flex-direction: column;
         justify-content: center;
-        align-items: center;
-        padding-top: 1.5rem;
-        gap: 1rem;
+        align-items: unset;
+        gap: 1.5rem;
+        padding: 1rem;
+
+        .dashboard-header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            .create-box-link {
+                display: flex;
+                max-width: fit-content;
+                text-decoration: none;
+                .create-box-button {
+                    display: flex;
+                    gap: 0.5rem;
+                    font-size: large;
+                    text-transform: capitalize;
+                    background: linear-gradient(158deg, rgba(21,42,51,1) 0%, rgba(1,66,159,1) 100%);
+                    border-radius: 9px;
+                    border: solid 1px lightblue;
+                }
+            }
+        }
+
+        .boxes-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-evenly;
+            align-items: center;
+            gap: 1rem;
+        }
     }
 }
 
