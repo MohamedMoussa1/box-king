@@ -92,7 +92,7 @@ def box(request, box_id=None):
     if request.method == 'GET':
         try:
             if box_id:
-                box = get_object_or_404(Box, id=box_id)
+                box = get_object_or_404(Box, id=box_id, user_id=request.user['id'])
                 box_name = box.box_name
                 box_description = box.box_description
                 item_list = list(box.items.values('id', 'item_name', 'quantity'))
