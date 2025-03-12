@@ -69,7 +69,7 @@ const Dashboard = () => {
           {boxes.map((box) => (
             <BoxCard key={box.id} box_name={box.box_name} box_id={box.id} />
           ))}
-          {boxes.length == 0 && (
+          {boxes.length === 0 && (
             <Typography variant="h6">
               Oh no, your dashboard is empty—let’s fix that! Create a box to get
               started!

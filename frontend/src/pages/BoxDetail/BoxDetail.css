@@ -14,6 +14,20 @@
         padding: 0.5rem;
         border-radius: 5px;
         border: solid 1px #e0e0e0;
+
+        .box-detail-header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+        
+        .generate-qr-code-button {
+            display: flex;
+            gap: 0.5rem;
+            border-radius: 5px;
+        }
     }
 
     

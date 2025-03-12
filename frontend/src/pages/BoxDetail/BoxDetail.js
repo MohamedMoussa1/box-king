@@ -1,6 +1,7 @@
 import "./BoxDetail.css";
 import { useParams } from "react-router-dom";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Button } from "@mui/material";
+import QrCode2Icon from "@mui/icons-material/QrCode2";
 import useRedirectIfLoggedOut from "../../hooks/useRedirectIfLoggedOut";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -47,7 +48,17 @@ const BoxDetail = () => {
     <Box className="page-container">
       <Box className="box-detail-container">
         <Box className="box-detail-header">
-          <Typography variant="h6">{boxDetail.box_name}</Typography>
+          <Box className="box-detail-header-top">
+            <Typography variant="h6">{boxDetail.box_name}</Typography>
+            <Button
+              href={`${process.env.REACT_APP_API_URL}/box-king/box/${box_id}/qr-code`}
+              target="_blank"
+              className="generate-qr-code-button"
+              variant="contained"
+            >
+              <QrCode2Icon /> Generate
+            </Button>
+          </Box>
           <Typography>
             {boxDetail.box_description || "No description available"}
           </Typography>
