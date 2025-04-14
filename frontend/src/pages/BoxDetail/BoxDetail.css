@@ -4,6 +4,15 @@
         display: flex;
         flex-direction: column;
         gap: 1rem;
+
+        .delete-button {
+            background-color: #d32f2f ;
+            display: flex;
+            gap: 0.3rem;
+            border-radius: 5px;
+            width: fit-content;
+            padding: 6px 12px 6px 8px;
+        }
     }
 
     .box-detail-header {
@@ -21,12 +30,20 @@
             align-items: center;
             flex-wrap: wrap;
             width: 100%;
+
+            .box-detail-header-top-left {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 1rem;
+            }
         }
         
         .generate-qr-code-button {
             display: flex;
             gap: 0.5rem;
             border-radius: 5px;
+            padding-right: 17.5px;
         }
     }
 

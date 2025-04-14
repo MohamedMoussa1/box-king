@@ -1,11 +1,13 @@
 import "./BoxDetail.css";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Box, Typography, Button } from "@mui/material";
 import QrCode2Icon from "@mui/icons-material/QrCode2";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import useRedirectIfLoggedOut from "../../hooks/useRedirectIfLoggedOut";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import BoxItemsTable from "../../components/BoxItemsTable/BoxItemsTable";
+import CustomModal from "../../components/CustomModal/CustomModal";
 
 const BoxDetail = () => {
   const { checkingIfLoggedOut } = useRedirectIfLoggedOut();
@@ -13,6 +15,10 @@ const BoxDetail = () => {
   const [boxDetail, setBoxDetail] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const deleteBoxModalMessage = `Are you sure you want to delete this box (${boxDetail.box_name})? All
+  items will be lost. This action cannot be reversed.`;
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function getBox() {
@@ -32,6 +38,22 @@ const BoxDetail = () => {
     getBox();
   }, [box_id]);
 
+  const handleOpenDeleteModal = () => setOpenDeleteModal(true);
+
+  const handleCloseDeleteModal = () => setOpenDeleteModal(false);
+
+  const handleDelete = async () => {
+    try {
+      await axios.delete(
+        `${process.env.REACT_APP_API_URL}/box-king/box/${box_id}`,
+        { withCredentials: true }
+      );
+      navigate("/dashboard");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   if (checkingIfLoggedOut) return null;
 
   if (loading) {
@@ -47,9 +69,25 @@ const BoxDetail = () => {
   return (
     <Box className="page-container">
       <Box className="box-detail-container">
+        <CustomModal
+          openModal={openDeleteModal}
+          onClose={handleCloseDeleteModal}
+          onConfirm={handleDelete}
+          deleteRequest={true}
+          message={deleteBoxModalMessage}
+        />
+        <Button
+          className="delete-button"
+          variant="contained"
+          onClick={handleOpenDeleteModal}
+        >
+          <DeleteIcon /> Delete Box
+        </Button>
         <Box className="box-detail-header">
           <Box className="box-detail-header-top">
-            <Typography variant="h6">{boxDetail.box_name}</Typography>
+            <Box className="box-detail-header-top-left">
+              <Typography variant="h6">{boxDetail.box_name}</Typography>
+            </Box>
             <Button
               href={`${process.env.REACT_APP_API_URL}/box-king/box/${box_id}/qr-code`}
               target="_blank"

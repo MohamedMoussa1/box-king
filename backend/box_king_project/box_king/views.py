@@ -87,7 +87,7 @@ def user(request):
 # TODO: Remove csrf exemption
 @csrf_exempt
 @jwt_required
-@require_http_methods(['GET', 'POST'])
+@require_http_methods(['GET', 'POST', 'DELETE'])
 def box(request, box_id=None):
     if request.method == 'GET':
         try:
@@ -121,6 +121,12 @@ def box(request, box_id=None):
             return JsonResponse({'error_type': 'validation_error', 'message': str(e)}, status=400)
         except ValueError as e:
             return JsonResponse({'error_type': 'value_error', 'message': str(e)}, status=400)
+        except Exception as e:
+            return JsonResponse({'error_type': 'unexpected_error', 'message': str(e)}, status=500)
+    if request.method == 'DELETE':
+        try:
+            get_object_or_404(Box, id=box_id, user_id=request.user['id']).delete()
+            return JsonResponse({'id': box_id}, status=200)
         except Exception as e:
             return JsonResponse({'error_type': 'unexpected_error', 'message': str(e)}, status=500)
 
