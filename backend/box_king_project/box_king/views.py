@@ -166,24 +166,25 @@ def generate_qr_code_pdf(request, box_id):
 @csrf_exempt
 @jwt_required
 @require_http_methods(['POST'])
-def add_item(request, box_id):
-    try:
-        data = json.loads(request.body)
-        box = get_object_or_404(Box, id=box_id)
-        item_name = data.get('item_name')
-        quantity = data.get('quantity')
-        
-        item = Item.objects.create(
-            item_name=item_name,
-            quantity=quantity,
-            box_id=box_id
-        )
-        return JsonResponse({'id': item.id}, status=200)
-    except IntegrityError as e:
-        return JsonResponse({'error_type': 'integrity_error', 'message': str(e)}, status=400)
-    except ValidationError as e:
-        return JsonResponse({'error_type': 'validation_error', 'message': str(e)}, status=400)
-    except ValueError as e:
-        return JsonResponse({'error_type': 'value_error', 'message': str(e)}, status=400)
-    except Exception as e:
-        return JsonResponse({'error_type': 'unexpected_error', 'message': str(e)}, status=500)
+def item(request, box_id):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            box = get_object_or_404(Box, id=box_id)
+            item_name = data.get('item_name')
+            quantity = data.get('quantity')
+            
+            item = Item.objects.create(
+                item_name=item_name,
+                quantity=quantity,
+                box_id=box_id
+            )
+            return JsonResponse({'id': item.id}, status=200)
+        except IntegrityError as e:
+            return JsonResponse({'error_type': 'integrity_error', 'message': str(e)}, status=400)
+        except ValidationError as e:
+            return JsonResponse({'error_type': 'validation_error', 'message': str(e)}, status=400)
+        except ValueError as e:
+            return JsonResponse({'error_type': 'value_error', 'message': str(e)}, status=400)
+        except Exception as e:
+            return JsonResponse({'error_type': 'unexpected_error', 'message': str(e)}, status=500)

@@ -10,5 +10,5 @@ urlpatterns = [
     path("box", views.box, name="box"),
     path('box/<int:box_id>', views.box, name='box_detail'),
     path('box/<int:box_id>/qr-code', views.generate_qr_code_pdf, name='generate_qr_code_pdf'),
-    path('box/<int:box_id>/add-item', views.add_item, name='add_item'),
+    path('box/<int:box_id>/item', views.item, name='add_item'),
 ]

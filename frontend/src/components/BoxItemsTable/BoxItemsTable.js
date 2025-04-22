@@ -119,7 +119,7 @@ const BoxItemsTable = ({ box_id, box_items }) => {
     };
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/box-king/box/${box_id}/add-item`,
+        `${process.env.REACT_APP_API_URL}/box-king/box/${box_id}/item`,
         itemData,
         { withCredentials: true }
       );
