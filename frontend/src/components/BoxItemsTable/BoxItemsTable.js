@@ -29,6 +29,8 @@ const BoxItemsTable = ({ box_id, box_items }) => {
   const [rowFormErrors, setRowFormErrors] = useState({});
   const [isSaving, setIsSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteSuccess, setDeleteSuccess] = useState(false);
 
   function EditToolbar(props) {
     const { setRows, setRowModesModel } = props;
@@ -75,9 +77,25 @@ const BoxItemsTable = ({ box_id, box_items }) => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
   };
 
-  const handleDeleteClick = (id) => () => {
-    setRows(rows.filter((row) => row.id !== id));
-    setGridKey((prev) => prev + 1);
+  const handleDeleteClick = (id) => async () => {
+    setIsDeleting(true);
+    setRowFormErrors({});
+    const db_item_id = rows.filter((row) => row.id === id)[0].db_item_id;
+    try {
+      await axios.delete(
+        `${process.env.REACT_APP_API_URL}/box-king/box/${box_id}/item/${db_item_id}`,
+        { withCredentials: true }
+      );
+      setDeleteSuccess(true);
+      setRows(rows.filter((row) => row.id !== id));
+      setGridKey((prev) => prev + 1);
+    } catch (error) {
+      setDeleteSuccess(false);
+      setRowFormErrors({ delete: "Cannot delete item." });
+      console.error(error);
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   const handleCancelClick = (id) => async () => {
@@ -203,7 +221,7 @@ const BoxItemsTable = ({ box_id, box_items }) => {
                 color: "primary.main",
               }}
               onClick={handleSaveClick(id)}
-              disabled={isSaving}
+              disabled={isSaving || isDeleting}
             />,
             <GridActionsCellItem
               icon={<CancelIcon />}
@@ -211,7 +229,7 @@ const BoxItemsTable = ({ box_id, box_items }) => {
               className="textPrimary"
               onClick={handleCancelClick(id)}
               color="inherit"
-              disabled={isSaving}
+              disabled={isSaving || isDeleting}
             />,
           ];
         }
@@ -223,14 +241,14 @@ const BoxItemsTable = ({ box_id, box_items }) => {
             className="textPrimary"
             onClick={handleEditClick(id)}
             color="inherit"
-            disabled={isSaving}
+            disabled={isSaving || isDeleting}
           />,
           <GridActionsCellItem
             icon={<DeleteIcon />}
             label="Delete"
             onClick={handleDeleteClick(id)}
             color="inherit"
-            disabled={isSaving}
+            disabled={isSaving || isDeleting}
           />,
         ];
       },
@@ -252,6 +270,12 @@ const BoxItemsTable = ({ box_id, box_items }) => {
     >
       {saveSuccess && (
         <CustomSnackBar message="Item saved successfully!" severity="success" />
+      )}
+      {deleteSuccess && (
+        <CustomSnackBar
+          message="Item deleted successfully!"
+          severity="success"
+        />
       )}
       {Object.keys(rowFormErrors).map((error) => {
         return (
