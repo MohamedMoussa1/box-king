@@ -191,7 +191,7 @@ def item(request, box_id, item_id=None):
     if request.method == 'DELETE':
         try:
             get_object_or_404(Box, id=box_id, user_id=request.user['id'])
-            get_object_or_404(Item, id=item_id).delete()
+            get_object_or_404(Item, id=item_id, box_id=box_id).delete()
             return JsonResponse({'id': item_id}, status=200)
         except Exception as e:
             return JsonResponse({'error_type': 'unexpected_error', 'message': str(e)}, status=500)
