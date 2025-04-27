@@ -79,6 +79,7 @@ const BoxItemsTable = ({ box_id, box_items }) => {
 
   const handleDeleteClick = (id) => async () => {
     setIsDeleting(true);
+    setDeleteSuccess(false);
     setRowFormErrors({});
     const db_item_id = rows.filter((row) => row.id === id)[0].db_item_id;
     try {
@@ -86,11 +87,10 @@ const BoxItemsTable = ({ box_id, box_items }) => {
         `${process.env.REACT_APP_API_URL}/box-king/box/${box_id}/item/${db_item_id}`,
         { withCredentials: true }
       );
-      setDeleteSuccess(true);
       setRows(rows.filter((row) => row.id !== id));
       setGridKey((prev) => prev + 1);
+      setDeleteSuccess(true);
     } catch (error) {
-      setDeleteSuccess(false);
       setRowFormErrors({ delete: "Cannot delete item." });
       console.error(error);
     } finally {
