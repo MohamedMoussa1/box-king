@@ -165,7 +165,7 @@ def generate_qr_code_pdf(request, box_id):
 # TODO: Remove csrf exemption
 @csrf_exempt
 @jwt_required
-@require_http_methods(['POST', 'DELETE'])
+@require_http_methods(['POST', 'DELETE', 'PUT'])
 def item(request, box_id, item_id=None):
     if request.method == 'POST':
         try:
@@ -193,5 +193,21 @@ def item(request, box_id, item_id=None):
             get_object_or_404(Box, id=box_id, user_id=request.user['id'])
             get_object_or_404(Item, id=item_id).delete()
             return JsonResponse({'id': item_id}, status=200)
+        except Exception as e:
+            return JsonResponse({'error_type': 'unexpected_error', 'message': str(e)}, status=500)
+    if request.method == 'PUT':
+        try:
+            data = json.loads(request.body)
+            item_name = data.get('item_name')
+            quantity = data.get('quantity')
+            get_object_or_404(Box, id=box_id, user_id=request.user['id'])
+            Item.objects.filter(id=item_id, box_id=box_id).update(item_name=item_name, quantity=quantity)
+            return JsonResponse({'id': item_id}, status=200)
+        except IntegrityError as e:
+            return JsonResponse({'error_type': 'integrity_error', 'message': str(e)}, status=400)
+        except ValidationError as e:
+            return JsonResponse({'error_type': 'validation_error', 'message': str(e)}, status=400)
+        except ValueError as e:
+            return JsonResponse({'error_type': 'value_error', 'message': str(e)}, status=400)
         except Exception as e:
             return JsonResponse({'error_type': 'unexpected_error', 'message': str(e)}, status=500)

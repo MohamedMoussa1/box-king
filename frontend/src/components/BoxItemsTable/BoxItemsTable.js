@@ -165,6 +165,41 @@ const BoxItemsTable = ({ box_id, box_items }) => {
     return newRow;
   };
 
+  const updateItem = async (newRow) => {
+    setIsSaving(true);
+    const itemData = {
+      item_name: newRow.item_name,
+      quantity: newRow.quantity,
+    };
+    try {
+      await axios.put(
+        `${process.env.REACT_APP_API_URL}/box-king/box/${box_id}/item/${newRow.db_item_id}`,
+        itemData,
+        { withCredentials: true }
+      );
+      newRow = {
+        ...newRow,
+        quantity: Math.trunc(newRow.quantity),
+      };
+    } catch (error) {
+      console.error(error);
+      const response = error.response;
+      if (
+        response.data.error_type === "integrity_error" &&
+        response.data.message.includes("unique_item_name_per_box")
+      ) {
+        const duplicateName = newRow.item_name;
+        newRow = null;
+        setRowFormErrors({
+          item_name: `${duplicateName} is already in your box.`,
+        });
+      }
+    } finally {
+      setIsSaving(false);
+    }
+    return newRow;
+  };
+
   const onProcessRowUpdateError = (error) => {
     console.error("Error Occured:", error);
   };
@@ -177,6 +212,8 @@ const BoxItemsTable = ({ box_id, box_items }) => {
     }
     if (newRow.isNew) {
       newRow = await addItem(newRow);
+    } else {
+      newRow = await updateItem(newRow);
     }
     const updatedRow = { ...newRow, isNew: false };
     setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
