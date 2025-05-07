@@ -7,6 +7,9 @@
 
         .custom-form-container {
             margin: auto;
+            width: 100%;
+            max-width: 500px;
+            padding: 15px;
         }
 
         .img-container {
@@ -14,7 +17,7 @@
         }
 
         .login-img {
-            width: 700px;
+            width: 100%;
             max-width: 700px;
         }
     }
