@@ -11,6 +11,7 @@ import Register from "./pages/Register/Register";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import BoxDetail from "./pages/BoxDetail/BoxDetail";
 import CreateBox from "./pages/CreateBox/CreateBox";
+import Landing from "./pages/Landing/Landing";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Navbar />
         <div className="App">
           <Routes>
+            <Route path="/" element={<Landing />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/dashboard" element={<Dashboard />} />

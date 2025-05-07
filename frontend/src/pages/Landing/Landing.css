@@ -1,0 +1,70 @@
+.page-container {
+    .landing-container {
+        background-color: aliceblue;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        .landing-header {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            .title {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-family: 'Roboto';
+                color: cornflowerblue;
+                font-size: 100px;
+                font-weight: bold;
+                text-shadow: 1px 1px 2px black;
+                .crown-animation {
+                    display: flex;
+                    width: 250px;
+                    margin-left: -40px;
+                    margin-bottom: 20px;
+                }
+            }
+            .subtitle {
+                font-family: sans-serif;
+                color: cornflowerblue;
+                font-size: 40px;
+            }
+        }
+    }
+    .workflow-container {
+        width: fit-content;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        padding: 50px;
+        .workflow-steps {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            background-color: aliceblue;
+            .workflow-step {
+                transition: transform 0.3s ease-in-out;
+                background-color: rgb(240, 240, 240);;
+                padding: 20px;
+                border-radius: 20px;
+                box-shadow: 0 1px 5px black;
+                .workflow-step-title {
+                    color: cornflowerblue;
+                    font-weight: bold;
+                    font-size: 25px;
+                }
+                .workflow-step-animation {
+                    width: 100%;
+                    max-width: 400px;
+                }
+            }
+            .workflow-step:hover {
+                transform: scale(1.02);
+                box-shadow: 0 1px 7px black;
+            }
+        }
+    }
+}
