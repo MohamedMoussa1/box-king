@@ -3,6 +3,7 @@ A Web app that generates QR Codes for boxes, linking them to their contents. Thi
 
 ## Progress Demo
 https://youtu.be/D0fZhI3hgg8 - 2025-05-08
+
 https://youtu.be/fvdplRS0B4o - 2025-03-25
 
 ## Tech Stack and Architecture Design
