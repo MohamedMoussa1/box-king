@@ -43,10 +43,13 @@ const BoxDetail = () => {
         setError(true);
         setLoading(false);
         console.error(error);
+        if (error.status === 404) {
+          navigate("/dashboard");
+        }
       }
     }
     getBox();
-  }, [box_id]);
+  }, [box_id, navigate]);
 
   const handleOpenDeleteModal = () => setOpenDeleteModal(true);
 

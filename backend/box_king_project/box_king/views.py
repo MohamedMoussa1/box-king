@@ -100,6 +100,8 @@ def box(request, box_id=None):
             else:
                 box_list = list(Box.objects.filter(user_id=request.user['id']).values('id', 'box_name'))
                 return JsonResponse({'boxes': box_list}, status=200)
+        except Http404 as e:
+            return JsonResponse({'error_type': 'Http_404', 'message': str(e)}, status=404)
         except Exception as e:
             return JsonResponse({'error_type': 'unexpected_error', 'message': str(e)}, status=500)
     if request.method == 'POST':
