@@ -14,6 +14,7 @@ const Register = () => {
 
   const header = "Register";
   const buttonText = "Get Started";
+  const errors = ["existingUser"];
   const register = true;
 
   if (checkingIfLoggedIn) return null;
@@ -33,6 +34,7 @@ const Register = () => {
             fields={fields}
             header={header}
             buttonText={buttonText}
+            errors={errors}
             register={register}
           ></CustomForm>
         </Box>

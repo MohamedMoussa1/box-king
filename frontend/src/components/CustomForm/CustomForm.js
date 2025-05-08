@@ -73,6 +73,15 @@ const CustomForm = ({
           ...prevErrors,
           duplicateBoxName: true,
         }));
+      } else if (
+        register &&
+        response.data.error_type == "integrity_error" &&
+        response.data.message.includes("auth_user_username_key")
+      ) {
+        setformErrors((prevErrors) => ({
+          ...prevErrors,
+          existingUser: true,
+        }));
       }
       console.error("Error Occured:", error);
     } finally {
@@ -93,6 +102,12 @@ const CustomForm = ({
           <Typography className="error-container">
             Oops! A box with this name already exists. Please choose a different
             name.
+          </Typography>
+        )}
+        {formErrors.existingUser && (
+          <Typography className="error-container">
+            A user with this email already exists. Would you like to login
+            instead?
           </Typography>
         )}
         <Box className="fields-container">
