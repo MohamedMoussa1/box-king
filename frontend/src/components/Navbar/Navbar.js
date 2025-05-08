@@ -41,7 +41,9 @@ const Navbar = () => {
       <Box className="navbar-right">
         {user ? (
           <>
-            <Button onClick={handleOpen}>{user.username}</Button>
+            <Button onClick={handleOpen} className="username-button">
+              {user.username}
+            </Button>
             <Menu
               anchorEl={anchorEl}
               open={openMenu}
