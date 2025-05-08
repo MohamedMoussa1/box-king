@@ -75,7 +75,7 @@ const CustomForm = ({
         }));
       } else if (
         register &&
-        response.data.error_type == "integrity_error" &&
+        response.data.error_type === "integrity_error" &&
         response.data.message.includes("auth_user_username_key")
       ) {
         setformErrors((prevErrors) => ({

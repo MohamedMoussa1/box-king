@@ -1,7 +1,7 @@
 import "./Navbar.css";
 import axios from "axios";
 import { Box, Button, Menu, MenuItem, ListItemIcon } from "@mui/material";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useUser } from "../../context/UserContext";
 import { useState } from "react";
 import Logout from "@mui/icons-material/Logout";
@@ -11,6 +11,8 @@ const Navbar = () => {
   const { user, setUser } = useUser();
   const [openMenu, setOpenMenu] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
+  const navigate = useNavigate();
+
   const handleOpen = (event) => {
     setAnchorEl(event.currentTarget);
     setOpenMenu(true);
@@ -18,6 +20,10 @@ const Navbar = () => {
   const handleClose = () => {
     setAnchorEl(null);
     setOpenMenu(false);
+  };
+  const handleDashboard = () => {
+    navigate("/dashboard");
+    handleClose();
   };
   const handleLogout = async () => {
     try {
@@ -69,16 +75,11 @@ const Navbar = () => {
                 },
               }}
             >
-              <MenuItem onClick={handleClose} className="navbar-link">
+              <MenuItem onClick={handleDashboard} className="navbar-link">
                 <ListItemIcon>
                   <SpaceDashboardIcon fontSize="small" />
                 </ListItemIcon>
-                <NavLink
-                  to="/dashboard"
-                  style={{ textDecoration: "none", color: "inherit" }}
-                >
-                  Dashboard
-                </NavLink>
+                Dashboard
               </MenuItem>
               <MenuItem onClick={handleLogout}>
                 <ListItemIcon>
