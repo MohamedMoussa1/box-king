@@ -144,7 +144,7 @@ const BoxItemsTable = ({ box_id, box_items }) => {
       newRow = {
         ...newRow,
         quantity: Math.trunc(newRow.quantity),
-        db_item_id: response.data.id,
+        db_item_id: response.data.item_id,
       };
     } catch (error) {
       console.error(error);
