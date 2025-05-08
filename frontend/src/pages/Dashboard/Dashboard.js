@@ -4,7 +4,7 @@ import { useUser } from "../../context/UserContext";
 import { useNavigate } from "react-router-dom";
 import useRedirectIfLoggedOut from "../../hooks/useRedirectIfLoggedOut";
 import axios from "axios";
-import { Box, Typography, Button, Link } from "@mui/material";
+import { Box, Typography, Button, Link, CircularProgress } from "@mui/material";
 import { BsBoxSeamFill } from "react-icons/bs";
 import BoxCard from "../../components/BoxCard/BoxCard";
 import CustomModal from "../../components/CustomModal/CustomModal";
@@ -72,7 +72,11 @@ const Dashboard = () => {
   if (checkingIfLoggedOut) return null;
 
   if (loading) {
-    return <Typography className="get-boxes-status">Loading...</Typography>;
+    return (
+      <Typography className="get-boxes-status">
+        <CircularProgress />
+      </Typography>
+    );
   }
 
   if (error) {

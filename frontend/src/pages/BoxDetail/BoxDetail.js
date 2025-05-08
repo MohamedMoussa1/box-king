@@ -1,6 +1,12 @@
 import "./BoxDetail.css";
 import { useNavigate, useParams } from "react-router-dom";
-import { Box, Typography, Button, TextField } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Button,
+  TextField,
+  CircularProgress,
+} from "@mui/material";
 import QrCode2Icon from "@mui/icons-material/QrCode2";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import EditIcon from "@mui/icons-material/Edit";
@@ -113,7 +119,11 @@ const BoxDetail = () => {
   if (checkingIfLoggedOut) return null;
 
   if (loading) {
-    return <Typography className="get-box-status">Loading...</Typography>;
+    return (
+      <Typography className="get-box-status">
+        <CircularProgress />
+      </Typography>
+    );
   }
 
   if (error) {
