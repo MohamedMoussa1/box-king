@@ -59,7 +59,7 @@ const CustomForm = ({
       }
     } catch (error) {
       const response = error.response;
-      if (login && error.status === 400) {
+      if (login && error.status === 401) {
         setformErrors((prevErrors) => ({
           ...prevErrors,
           invalidCredentials: true,
