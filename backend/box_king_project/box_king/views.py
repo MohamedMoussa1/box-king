@@ -181,7 +181,7 @@ def generate_qr_code_pdf(request, box_id):
         buffer.seek(0)
 
         pdf_data = buffer.getvalue()
-        file_name = f'{box.box_name.replace(' ', '_')}_QR_Code.pdf'
+        file_name = f'{box.box_name.replace(" ", "_")}_QR_Code.pdf'
         response = HttpResponse(pdf_data, content_type='application/pdf')
         response['Content-Disposition'] = f'inline; filename="{file_name}"'
         return response
