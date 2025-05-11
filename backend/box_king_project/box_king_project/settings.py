@@ -33,9 +33,7 @@ DEBUG = env('DJANGO_DEBUG')
 
 CORS_ALLOW_CREDENTIALS = True
 
-ALLOWED_HOSTS = [
-    env('CLIENT_URL'),
-]
+ALLOWED_HOSTS = env('ALLOWED_HOSTS').split(',')
 
 
 # Application definition
