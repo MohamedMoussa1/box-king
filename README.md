@@ -6,6 +6,9 @@ https://youtu.be/D0fZhI3hgg8 - 2025-05-08
 
 https://youtu.be/fvdplRS0B4o - 2025-03-25
 
+## Jira Snapshots
+https://drive.google.com/drive/folders/1WHSdH8ipvpFL_uRk391sCrAzrihVwIfo?usp=sharing
+
 ## Tech Stack and Architecture Design
 Tech Stack: Python, Django, PostgreSQL, React, Material UI, Datamuse
 
